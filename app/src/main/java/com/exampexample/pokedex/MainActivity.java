@@ -1,7 +1,11 @@
 package com.exampexample.pokedex;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -19,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
      * a RequestQueue for the API.
      */
     private static RequestQueue queue;
-
+    /** The variable for the button. */
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,14 @@ public class MainActivity extends AppCompatActivity {
         // need a button such that when it is clicked, API call is made through onClick.
         queue = Volley.newRequestQueue(MainActivity.this);
         call();
+
+        button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDetail();
+            }
+        });
     }
 
     // syntax from https://www.geeksforgeeks.org/volley-library-in-android/.
@@ -94,5 +107,10 @@ public class MainActivity extends AppCompatActivity {
                 });
         // Add the request to the RequestQueue.
         queue.add(request);
+    }
+
+    public void openDetail() {
+        Intent intent = new Intent(this, DetailsActivity.class);
+        startActivity(intent);
     }
 }
