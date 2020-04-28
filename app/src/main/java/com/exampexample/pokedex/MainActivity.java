@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         queue = Volley.newRequestQueue(MainActivity.this);
         call();
 
+        // when button is clicked send user to the details of that pokemon they clicked
         button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,9 +65,6 @@ public class MainActivity extends AppCompatActivity {
                                     //to see what the pokemon name is.
                                     Log.d("pokemon", pokemon.get("name").getAsString());
 
-
-
-
                                     // now make another API call to access the selected pokemon's values.
                                     String pokeURL = pokemon.get("url").getAsString();
                                     JsonObjectRequest pokeRequest = new JsonObjectRequest
@@ -93,9 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
                                     queue.add(pokeRequest);
 
-
-
-
                                 }
                             }
                         }, new Response.ErrorListener() {
@@ -109,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         queue.add(request);
     }
 
+    /** Method to transfer to the DetailsActivity. */
     public void openDetail() {
         Intent intent = new Intent(this, DetailsActivity.class);
         startActivity(intent);
