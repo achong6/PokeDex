@@ -9,9 +9,68 @@
 
     <Button
         android:id="@+id/button2"
+        android:layout_width="68dp"
+        android:layout_height="35dp"
+        android:text="Back"
+        tools:layout_editor_absoluteX="25dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="97dp"
-        tools:layout_editor_absoluteY="85dp" />
+        android:text="Pokémon ID"
+        tools:layout_editor_absoluteX="33dp"
+        tools:layout_editor_absoluteY="77dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Height: "
+        tools:layout_editor_absoluteX="42dp"
+        tools:layout_editor_absoluteY="559dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Weight: "
+        tools:layout_editor_absoluteX="42dp"
+        tools:layout_editor_absoluteY="591dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="344dp"
+        android:layout_height="291dp"
+        tools:layout_editor_absoluteX="33dp"
+        tools:layout_editor_absoluteY="171dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="287dp"
+        android:layout_height="37dp"
+        android:text="Pokémon Name"
+        tools:layout_editor_absoluteX="62dp"
+        tools:layout_editor_absoluteY="125dp" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="146dp"
+        android:layout_height="57dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView5"
+        app:srcCompat="@mipmap/ic_launcher"
+        tools:layout_editor_absoluteY="462dp" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="138dp"
+        android:layout_height="58dp"
+        app:srcCompat="@mipmap/ic_launcher"
+        tools:layout_editor_absoluteX="211dp"
+        tools:layout_editor_absoluteY="462dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
