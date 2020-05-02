@@ -17,7 +17,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         // when clicked, send user back to the main screen.
-        button = (Button) findViewById(R.id.button2);
+        button = (Button) findViewById(R.id.backButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
