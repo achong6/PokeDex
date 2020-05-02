@@ -1,4 +1,5 @@
 package com.exampexample.pokedex;
+package com.codinginflow.multipleonclicklistenerexample;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +19,7 @@ import com.google.gson.JsonParser;
 import org.json.JSONObject;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     /**
      * a RequestQueue for the API.
      */
@@ -60,9 +61,13 @@ public class MainActivity extends AppCompatActivity {
                                 JsonObject object = JsonParser.parseString(JsonString).getAsJsonObject();
                                 JsonArray results = object.get("results").getAsJsonArray();
                                 for (int i = 0; i < results.size(); i++) {
-                                    //a pokemon.
+                                    // a pokemon.
                                     JsonObject pokemon = results.get(i).getAsJsonObject();
-                                    //to see what the pokemon name is.
+
+                                    // To get the amount of buttons needed to be created
+                                    int pokemonCount = pokemon.get("count").getAsInt();
+
+                                    // to see what the pokemon name is.
                                     Log.d("pokemon", pokemon.get("name").getAsString());
 
                                     // now make another API call to access the selected pokemon's values.
