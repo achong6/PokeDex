@@ -1,17 +1,12 @@
 package com.exampexample.pokedex;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,10 +21,7 @@ import com.google.gson.JsonParser;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,39 +30,17 @@ public class MainActivity extends AppCompatActivity {
     /** The arrays to get data for the List view. */
     private ArrayList<String> PokemonNames = new ArrayList<String>();
     private ArrayList<Integer> PokemonIDs = new ArrayList<Integer>();
+    private ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // creates a list view
-        ListView lv = (ListView) findViewById(R.id.listview);
-
-
-        //*******************Commenting out things related to addListContent for the time being.*****************8
-        //addListContent();
-
 
         // need a button such that when it is clicked, API call is made through onClick.
         queue = Volley.newRequestQueue(MainActivity.this);
         call();
-        // adds the layout for each individual list and places it into the view
-        lv.setAdapter(new MyListAdapter(this, R.layout.list_item, PokemonNames));
     }
-
-    // used to add the items to the corresponding list
-    // tried to get count based off the number of pokemons there are
-
-    /*
-
-
-    private void addListContent() {
-        for (int i = 0; i < results.size(); i++) {
-            PokemonNames.add();
-            PokemonIDs.add();
-        }
-    }
-    */
 
     // syntax from https://www.geeksforgeeks.org/volley-library-in-android/.
     // make API call to PokeApi.
@@ -94,18 +64,17 @@ public class MainActivity extends AppCompatActivity {
 
                                     //add pokemon names to the Pokemon Name List.
                                     PokemonNames.add(i, pokemon.get("name").getAsString());
+                                    //System.out.println(PokemonNames.get(i));
+                                    //PokemonIDs.add(i,pokemon.get("id").getAsInt());
 
                                     //sanity check: see if the PokemonList contains every name (it does when i ran it).
-                                    for (int k = 0; k < PokemonNames.size(); k++) {
-                                        Log.d("pokemonName", PokemonNames.get(k));
-                                    }
-
-
+                                    //for (int k = 0; k < PokemonNames.size(); k++) {
+                                        //Log.d("pokemonName", PokemonNames.get(k));
+                                    //}
 
                                     // now make another API call to access the selected pokemon's values.
                                     //************* TODO: Add height, etc. to lists (don't know what PokemonIDlist means...). The code should have gotten all the heights/weight/type but make sure....
                                     //**** USE LOGCAT (find it using "search" to see the printed values to console.)
-
 
                                     String pokeURL = pokemon.get("url").getAsString();
                                     JsonObjectRequest pokeRequest = new JsonObjectRequest
@@ -118,12 +87,11 @@ public class MainActivity extends AppCompatActivity {
 
                                                             // height.
                                                             int height = pokeObject.get("height").getAsInt();
-                                                            Log.d("height", String.valueOf(height));
+                                                            //Log.d("height", String.valueOf(height));
 
                                                             // weight.
                                                             int weight = pokeObject.get("weight").getAsInt();
-                                                            Log.d("weight", String.valueOf(weight));
-
+                                                            //Log.d("weight", String.valueOf(weight));
 
                                                             //types (note there can be more than one).
 
@@ -132,8 +100,19 @@ public class MainActivity extends AppCompatActivity {
                                                                 JsonObject type = types.get(j).getAsJsonObject().get("type").getAsJsonObject();
                                                                 String typeName = type.get("name").getAsString();
                                                                 //print type name to logcat.
-                                                                Log.d("type", typeName);
+                                                                //Log.d("type", typeName);
 
+                                                                // creates a list view
+                                                                lv = (ListView) findViewById(R.id.listView);
+                                                                // adds the layout for each individual list and places it into the view
+                                                                ArrayAdapter<String> arrayAdapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, PokemonNames);
+                                                                lv.setAdapter(arrayAdapter);
+                                                                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                                    @Override
+                                                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                                        openDetail();
+                                                                    }
+                                                                });
                                                             }
                                                         }
                                                     }, new Response.ErrorListener() {
@@ -147,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
 
                                     // TODO: 2020-05-03 : implement try/catch blocks if have time. 
 
-
                                     queue.add(pokeRequest);
                                 }
                             }
@@ -160,44 +138,6 @@ public class MainActivity extends AppCompatActivity {
                 });
         // Add the request to the RequestQueue.
         queue.add(request);
-    }
-
-    private class MyListAdapter extends ArrayAdapter<String> {
-        private int layout;
-        private MyListAdapter(Context context, int resource, List<String> objects) {
-            super(context, resource, objects);
-            layout = resource;
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            ViewBuilder mainViewBuilder = null;
-            if (convertView == null) {
-                LayoutInflater inflater = LayoutInflater.from(getContext());
-                convertView = inflater.inflate(layout, parent,false);
-                ViewBuilder viewBuilder = new ViewBuilder();
-                viewBuilder.pokemonImage = (ImageView) convertView.findViewById(R.id.PokemonImageMain);
-                viewBuilder.pokemonID = (TextView) convertView.findViewById(R.id.PokemonIDMain);
-                viewBuilder.button = (Button) convertView.findViewById(R.id.buttonMain);
-                viewBuilder.button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openDetail();
-                    }
-                });
-                convertView.setTag(viewBuilder);
-            } else {
-                mainViewBuilder = (ViewBuilder) convertView.getTag();
-                mainViewBuilder.pokemonID.setText(getItem(position));
-            }
-            return convertView;
-        }
-    }
-    public class ViewBuilder {
-        ImageView pokemonImage;
-        TextView pokemonID;
-        Button button;
     }
     /** Method to transfer to the DetailsActivity. */
     public void openDetail() {
