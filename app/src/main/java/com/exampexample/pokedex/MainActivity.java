@@ -34,8 +34,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     /** A RequestQueue for the API. */
     private static RequestQueue queue;
-    /** The variable for the button. */
-    //private Button button;
     /** The arrays to get data for the List view. */
     private ArrayList<String> PokemonNames = new ArrayList<String>();
     private ArrayList<Integer> PokemonIDs = new ArrayList<Integer>();
@@ -54,9 +52,10 @@ public class MainActivity extends AppCompatActivity {
         lv.setAdapter(new MyListAdapter(this, R.layout.list_item, PokemonNames));
     }
 
-    // used to add the items to the corrosponding list
+    // used to add the items to the corresponding list
+    // tryied to get count based off the number of pokemons there are
     private void addListContent() {
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < results.size(); i++) {
             PokemonNames.add();
             PokemonIDs.add();
         }
