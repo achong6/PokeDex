@@ -13,10 +13,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -28,8 +24,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     /** A RequestQueue for the API. */
@@ -44,7 +45,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // creates a list view
         ListView lv = (ListView) findViewById(R.id.listview);
-        addListContent();
+
+
+        //*******************Commenting out things related to addListContent for the time being.*****************8
+        //addListContent();
+
+
         // need a button such that when it is clicked, API call is made through onClick.
         queue = Volley.newRequestQueue(MainActivity.this);
         call();
@@ -53,18 +59,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // used to add the items to the corresponding list
-    // tryied to get count based off the number of pokemons there are
+    // tried to get count based off the number of pokemons there are
+
+    /*
+
+
     private void addListContent() {
         for (int i = 0; i < results.size(); i++) {
             PokemonNames.add();
             PokemonIDs.add();
         }
     }
+    */
+
     // syntax from https://www.geeksforgeeks.org/volley-library-in-android/.
     // make API call to PokeApi.
 
     public void call() {
-        String url = "https://pokeapi.co/api/v2/pokemon";
+        //made REST limit 964 to access all Pokemon at once.
+        String url = "https://pokeapi.co/api/v2/pokemon?limit=964";
 
         JsonObjectRequest request = new JsonObjectRequest
                 (Request.Method.GET, url, null,
@@ -78,9 +91,21 @@ public class MainActivity extends AppCompatActivity {
                                     // a pokemon.
                                     JsonObject pokemon = results.get(i).getAsJsonObject();
 
-                                    // to see what the pokemon name is.
-                                    Log.d("pokemon", pokemon.get("name").getAsString());
+
+                                    //add pokemon names to the Pokemon Name List.
+                                    PokemonNames.add(i, pokemon.get("name").getAsString());
+
+                                    //sanity check: see if the PokemonList contains every name (it does when i ran it).
+                                    for (int k = 0; k < PokemonNames.size(); k++) {
+                                        Log.d("pokemonName", PokemonNames.get(k));
+                                    }
+
+
+
                                     // now make another API call to access the selected pokemon's values.
+                                    //************* TODO: Add height, etc. to lists (don't know what PokemonIDlist means...). The code should have gotten all the heights/weight/type but make sure....
+                                    //**** USE LOGCAT (find it using "search" to see the printed values to console.)
+
 
                                     String pokeURL = pokemon.get("url").getAsString();
                                     JsonObjectRequest pokeRequest = new JsonObjectRequest
@@ -90,11 +115,25 @@ public class MainActivity extends AppCompatActivity {
                                                         public void onResponse(JSONObject pokeResponse) {
                                                             String JsonString = pokeResponse.toString();
                                                             JsonObject pokeObject = JsonParser.parseString(JsonString).getAsJsonObject();
-                                                            JsonArray abilities = pokeObject.get("abilities").getAsJsonArray();
-                                                            for (int i = 0; i < abilities.size(); i++) {
-                                                                JsonObject ability = abilities.get(i).getAsJsonObject();
-                                                                //print ability name to logcat.
-                                                                Log.d("ability", ability.get("name").getAsString());
+
+                                                            // height.
+                                                            int height = pokeObject.get("height").getAsInt();
+                                                            Log.d("height", String.valueOf(height));
+
+                                                            // weight.
+                                                            int weight = pokeObject.get("weight").getAsInt();
+                                                            Log.d("weight", String.valueOf(weight));
+
+
+                                                            //types (note there can be more than one).
+
+                                                            JsonArray types = pokeObject.get("types").getAsJsonArray();
+                                                            for (int j = 0; j < types.size(); j++) {
+                                                                JsonObject type = types.get(j).getAsJsonObject().get("type").getAsJsonObject();
+                                                                String typeName = type.get("name").getAsString();
+                                                                //print type name to logcat.
+                                                                Log.d("type", typeName);
+
                                                             }
                                                         }
                                                     }, new Response.ErrorListener() {
@@ -105,8 +144,11 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             });
 
-                                    queue.add(pokeRequest);
 
+                                    // TODO: 2020-05-03 : implement try/catch blocks if have time. 
+
+
+                                    queue.add(pokeRequest);
                                 }
                             }
                         }, new Response.ErrorListener() {
