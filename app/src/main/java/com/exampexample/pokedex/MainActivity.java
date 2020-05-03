@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // creates a list view
         ListView lv = (ListView) findViewById(R.id.listview);
+        addListContent();
         // need a button such that when it is clicked, API call is made through onClick.
         queue = Volley.newRequestQueue(MainActivity.this);
         call();
@@ -53,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
         lv.setAdapter(new MyListAdapter(this, R.layout.list_item, PokemonNames));
     }
 
+    // used to add the items to the corrosponding list
+    private void addListContent() {
+        for (int i = 0; i < count; i++) {
+            PokemonNames.add();
+            PokemonIDs.add();
+        }
+    }
     // syntax from https://www.geeksforgeeks.org/volley-library-in-android/.
     // make API call to PokeApi.
 
