@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private static RequestQueue queue;
     /** The arrays to get data for the List view. */
     private ArrayList<String> PokemonNames = new ArrayList<String>();
+    private ArrayList<Integer> PokemonIDs = new ArrayList<Integer>();
     private ListView lv;
 
     @Override
@@ -85,20 +86,20 @@ public class MainActivity extends AppCompatActivity {
 
                                                             // height.
                                                             final int height = pokeObject.get("height").getAsInt();
-                                                            //Log.d("height", String.valueOf(height));
+                                                            Log.d("height", String.valueOf(height));
 
                                                             // weight.
                                                             final int weight = pokeObject.get("weight").getAsInt();
-                                                            //Log.d("weight", String.valueOf(weight));
+                                                            Log.d("weight", String.valueOf(weight));
 
                                                             //types (note there can be more than one).
 
-                                                            JsonArray types = pokeObject.get("types").getAsJsonArray();
+                                                            final JsonArray types = pokeObject.get("types").getAsJsonArray();
                                                             for (int j = 0; j < types.size(); j++) {
                                                                 JsonObject type = types.get(j).getAsJsonObject().get("type").getAsJsonObject();
                                                                 String typeName = type.get("name").getAsString();
                                                                 //print type name to logcat.
-                                                                //Log.d("type", typeName);
+                                                                Log.d("type", typeName);
                                                             }
                                                             // creates a list view
                                                             lv = (ListView) findViewById(R.id.listView);
@@ -110,9 +111,9 @@ public class MainActivity extends AppCompatActivity {
                                                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                                                     Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                                                                     intent.putExtra("name", PokemonNames.get(position));
-                                                                    System.out.println(PokemonNames.get(position));
                                                                     intent.putExtra("weight", weight);
                                                                     intent.putExtra("height", height);
+                                                                    intent.putExtra("type", pokeObject.get("types").getAsString());
                                                                     startActivity(intent);
                                                                 }
                                                             });

@@ -35,6 +35,8 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String currentName = intent.getStringExtra("name");
         pokemoName.setText(currentName);
+        String currentType = intent.getStringExtra("type");
+        pokemonType1.setText(currentType);
 
         int currentHeight = intent.getIntExtra("height", 0);
         int currentWeight = intent.getIntExtra("weight", 0);
