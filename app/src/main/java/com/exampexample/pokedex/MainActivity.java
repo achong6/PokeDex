@@ -64,13 +64,12 @@ public class MainActivity extends AppCompatActivity {
 
                                     //add pokemon names to the Pokemon Name List.
                                     PokemonNames.add(i, pokemon.get("name").getAsString());
-                                    //System.out.println(PokemonNames.get(i));
                                     //PokemonIDs.add(i,pokemon.get("id").getAsInt());
 
                                     //sanity check: see if the PokemonList contains every name (it does when i ran it).
-                                    //for (int k = 0; k < PokemonNames.size(); k++) {
-                                        //Log.d("pokemonName", PokemonNames.get(k));
-                                    //}
+                                    for (int k = 0; k < PokemonNames.size(); k++) {
+                                        Log.d("pokemonName", PokemonNames.get(k));
+                                    }
 
                                     // now make another API call to access the selected pokemon's values.
                                     //************* TODO: Add height, etc. to lists (don't know what PokemonIDlist means...). The code should have gotten all the heights/weight/type but make sure....
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
                                                             // weight.
                                                             int weight = pokeObject.get("weight").getAsInt();
-                                                            //Log.d("weight", String.valueOf(weight));
+                                                            //xLog.d("weight", String.valueOf(weight));
 
                                                             //types (note there can be more than one).
 
@@ -110,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                                                                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                                     @Override
                                                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                                        PokemonNames.get(position);
                                                                         openDetail();
                                                                     }
                                                                 });
