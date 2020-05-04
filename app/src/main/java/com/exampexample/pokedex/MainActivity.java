@@ -67,9 +67,9 @@ public class MainActivity extends AppCompatActivity {
                                     //PokemonIDs.add(i,pokemon.get("id").getAsInt());
 
                                     //sanity check: see if the PokemonList contains every name (it does when i ran it).
-                                    for (int k = 0; k < PokemonNames.size(); k++) {
-                                        Log.d("pokemonName", PokemonNames.get(k));
-                                    }
+                                    //for (int k = 0; k < PokemonNames.size(); k++) {
+                                    //    Log.d("pokemonName", PokemonNames.get(k));
+                                    //}
 
                                     // now make another API call to access the selected pokemon's values.
                                     //************* TODO: Add height, etc. to lists (don't know what PokemonIDlist means...). The code should have gotten all the heights/weight/type but make sure....
@@ -82,14 +82,14 @@ public class MainActivity extends AppCompatActivity {
                                                         @Override
                                                         public void onResponse(JSONObject pokeResponse) {
                                                             String JsonString = pokeResponse.toString();
-                                                            JsonObject pokeObject = JsonParser.parseString(JsonString).getAsJsonObject();
+                                                            final JsonObject pokeObject = JsonParser.parseString(JsonString).getAsJsonObject();
 
                                                             // height.
-                                                            int height = pokeObject.get("height").getAsInt();
+                                                            final int height = pokeObject.get("height").getAsInt();
                                                             //Log.d("height", String.valueOf(height));
 
                                                             // weight.
-                                                            int weight = pokeObject.get("weight").getAsInt();
+                                                            final int weight = pokeObject.get("weight").getAsInt();
                                                             //xLog.d("weight", String.valueOf(weight));
 
                                                             //types (note there can be more than one).
@@ -100,20 +100,24 @@ public class MainActivity extends AppCompatActivity {
                                                                 String typeName = type.get("name").getAsString();
                                                                 //print type name to logcat.
                                                                 //Log.d("type", typeName);
-
-                                                                // creates a list view
-                                                                lv = (ListView) findViewById(R.id.listView);
-                                                                // adds the layout for each individual list and places it into the view
-                                                                ArrayAdapter<String> arrayAdapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, PokemonNames);
-                                                                lv.setAdapter(arrayAdapter);
-                                                                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                                    @Override
-                                                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                                        PokemonNames.get(position);
-                                                                        openDetail();
-                                                                    }
-                                                                });
                                                             }
+                                                            // creates a list view
+                                                            lv = (ListView) findViewById(R.id.listView);
+                                                            // adds the layout for each individual list and places it into the view
+                                                            ArrayAdapter<String> arrayAdapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, PokemonNames);
+                                                            lv.setAdapter(arrayAdapter);
+                                                            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                                @Override
+                                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                                    Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                                                                    intent.putExtra("name", PokemonNames.get(position));
+                                                                    intent.putExtra("weight", pokeObject.get("weight").getAsInt());
+                                                                    intent.putExtra("height", pokeObject.get("height").getAsInt());
+                                                                    System.out.println(pokeObject.get("height").getAsInt());
+                                                                    startActivity(intent);
+                                                                    openDetail();
+                                                                }
+                                                            });
                                                         }
                                                     }, new Response.ErrorListener() {
                                                 @Override

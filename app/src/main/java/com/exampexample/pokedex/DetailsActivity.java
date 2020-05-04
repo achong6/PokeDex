@@ -32,6 +32,15 @@ public class DetailsActivity extends AppCompatActivity {
         pokemonType1 = findViewById(R.id.PokemonType1);
         pokemonType2 = findViewById(R.id.PokemonType2);
 
+        Intent intent = getIntent();
+        String currentName = intent.getStringExtra("name");
+        pokemoName.setText(currentName);
+        /*
+        int currentHeight = intent.getIntExtra("height", 0);
+        int currentWeight = intent.getIntExtra("weight", 0);
+        height.setText("" + currentHeight);
+        weight.setText("" + currentWeight);
+*/
         // when clicked, send user back to the main screen.
         button = (Button) findViewById(R.id.backButton);
         button.setOnClickListener(new View.OnClickListener() {
