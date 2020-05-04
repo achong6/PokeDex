@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private static RequestQueue queue;
     /** The arrays to get data for the List view. */
     private ArrayList<String> PokemonNames = new ArrayList<String>();
-    private ArrayList<Integer> PokemonIDs = new ArrayList<Integer>();
     private ListView lv;
 
     @Override
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
                                                             // weight.
                                                             final int weight = pokeObject.get("weight").getAsInt();
-                                                            //xLog.d("weight", String.valueOf(weight));
+                                                            //Log.d("weight", String.valueOf(weight));
 
                                                             //types (note there can be more than one).
 
@@ -111,11 +110,10 @@ public class MainActivity extends AppCompatActivity {
                                                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                                                     Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                                                                     intent.putExtra("name", PokemonNames.get(position));
-                                                                    intent.putExtra("weight", pokeObject.get("weight").getAsInt());
-                                                                    intent.putExtra("height", pokeObject.get("height").getAsInt());
-                                                                    System.out.println(pokeObject.get("height").getAsInt());
+                                                                    System.out.println(PokemonNames.get(position));
+                                                                    intent.putExtra("weight", weight);
+                                                                    intent.putExtra("height", height);
                                                                     startActivity(intent);
-                                                                    openDetail();
                                                                 }
                                                             });
                                                         }
@@ -126,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                                                     Log.e("specific Pokemon error", "no");
                                                 }
                                             });
-
 
                                     // TODO: 2020-05-03 : implement try/catch blocks if have time. 
 
@@ -142,10 +139,5 @@ public class MainActivity extends AppCompatActivity {
                 });
         // Add the request to the RequestQueue.
         queue.add(request);
-    }
-    /** Method to transfer to the DetailsActivity. */
-    public void openDetail() {
-        Intent intent = new Intent(this, DetailsActivity.class);
-        startActivity(intent);
     }
 }

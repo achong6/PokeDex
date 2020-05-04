@@ -35,12 +35,12 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String currentName = intent.getStringExtra("name");
         pokemoName.setText(currentName);
-        /*
+
         int currentHeight = intent.getIntExtra("height", 0);
         int currentWeight = intent.getIntExtra("weight", 0);
         height.setText("" + currentHeight);
-        weight.setText("" + currentWeight);
-*/
+        weight.setText("" + currentWeight + "lb");
+
         // when clicked, send user back to the main screen.
         button = (Button) findViewById(R.id.backButton);
         button.setOnClickListener(new View.OnClickListener() {
