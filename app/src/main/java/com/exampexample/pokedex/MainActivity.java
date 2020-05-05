@@ -21,16 +21,23 @@ import com.google.gson.JsonParser;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     /** A RequestQueue for the API. */
     private static RequestQueue queue;
-    /** The arrays to get data for the List view. */
+
+    ///** The arrays to get data for the List view. */
     private ArrayList<String> PokemonNames = new ArrayList<String>();
-    private ArrayList<Integer> PokemonIDs = new ArrayList<Integer>();
+    //private ArrayList<Integer> PokemonIDs = new ArrayList<Integer>();
+
     private ListView lv;
+
+    /** A Map for the Pokemon name and PokeObject */
+    private static Map<String, JsonObject>  pokeMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
     // make API call to PokeApi.
 
     public void call() {
-        //made REST limit 964 to access all Pokemon at once.
-        String url = "https://pokeapi.co/api/v2/pokemon?limit=964";
+        //can change REST limit appropriately .
+        String url = "https://pokeapi.co/api/v2/pokemon";
 
         JsonObjectRequest request = new JsonObjectRequest
                 (Request.Method.GET, url, null,
@@ -60,21 +67,15 @@ public class MainActivity extends AppCompatActivity {
                                 for (int i = 0; i < results.size(); i++) {
                                     // a pokemon.
                                     JsonObject pokemon = results.get(i).getAsJsonObject();
+                                    Log.d("name", pokemon.get("name").getAsString());
+                                    final String name = pokemon.get("name").getAsString();
+
 
 
                                     //add pokemon names to the Pokemon Name List.
                                     PokemonNames.add(i, pokemon.get("name").getAsString());
-                                    //PokemonIDs.add(i,pokemon.get("id").getAsInt());
-
-                                    //sanity check: see if the PokemonList contains every name (it does when i ran it).
-                                    //for (int k = 0; k < PokemonNames.size(); k++) {
-                                    //    Log.d("pokemonName", PokemonNames.get(k));
-                                    //}
 
                                     // now make another API call to access the selected pokemon's values.
-                                    //************* TODO: Add height, etc. to lists (don't know what PokemonIDlist means...). The code should have gotten all the heights/weight/type but make sure....
-                                    //**** USE LOGCAT (find it using "search" to see the printed values to console.)
-
                                     String pokeURL = pokemon.get("url").getAsString();
                                     JsonObjectRequest pokeRequest = new JsonObjectRequest
                                             (Request.Method.GET, pokeURL, null,
@@ -84,23 +85,9 @@ public class MainActivity extends AppCompatActivity {
                                                             String JsonString = pokeResponse.toString();
                                                             final JsonObject pokeObject = JsonParser.parseString(JsonString).getAsJsonObject();
 
-                                                            // height.
-                                                            final int height = pokeObject.get("height").getAsInt();
-                                                            Log.d("height", String.valueOf(height));
+                                                            //add to map.
+                                                            pokeMap.put(name, pokeObject);
 
-                                                            // weight.
-                                                            final int weight = pokeObject.get("weight").getAsInt();
-                                                            Log.d("weight", String.valueOf(weight));
-
-                                                            //types (note there can be more than one).
-
-                                                            final JsonArray types = pokeObject.get("types").getAsJsonArray();
-                                                            for (int j = 0; j < types.size(); j++) {
-                                                                JsonObject type = types.get(j).getAsJsonObject().get("type").getAsJsonObject();
-                                                                String typeName = type.get("name").getAsString();
-                                                                //print type name to logcat.
-                                                                Log.d("type", typeName);
-                                                            }
                                                             // creates a list view
                                                             lv = (ListView) findViewById(R.id.listView);
                                                             // adds the layout for each individual list and places it into the view
@@ -109,11 +96,24 @@ public class MainActivity extends AppCompatActivity {
                                                             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                                 @Override
                                                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                                    JsonObject pokeMapObject = pokeMap.get(name);
                                                                     Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                                                                     intent.putExtra("name", PokemonNames.get(position));
-                                                                    intent.putExtra("weight", weight);
-                                                                    intent.putExtra("height", height);
-                                                                    intent.putExtra("type", pokeObject.get("types").getAsString());
+                                                                    intent.putExtra("weight", pokeMapObject.get("height").getAsInt());
+                                                                    intent.putExtra("height", pokeMapObject.get("weight").getAsInt());
+
+                                                                    JsonArray types = pokeMapObject.get("types").getAsJsonArray();
+                                                                    String stringType = "";
+
+
+                                                                    for (int j = 0; j < types.size(); j++) {
+                                                                        JsonObject type = types.get(j).getAsJsonObject().get("type").getAsJsonObject();
+                                                                        String typeName = type.get("name").getAsString();
+                                                                        //print type name to logcat.
+                                                                        Log.d("type", typeName);
+                                                                        stringType = stringType + " " + typeName;
+                                                                    }
+                                                                    intent.putExtra("type", stringType);
                                                                     startActivity(intent);
                                                                 }
                                                             });
