@@ -12,11 +12,10 @@ import android.widget.TextView;
 public class DetailsActivity extends AppCompatActivity {
     /** The variable for the button. */
     private Button button;
-    private TextView pokemonID;
     private TextView height;
     private TextView weight;
     private TextView pokemoName;
-    private TextView pokemonType1;
+    private TextView pokemonType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,19 +26,24 @@ public class DetailsActivity extends AppCompatActivity {
         pokemoName = findViewById(R.id.PokemonName);
         height = findViewById(R.id.PokemonHeight);
         weight = findViewById(R.id.PokemonWeight);
-        pokemonID = findViewById(R.id.PokemonID);
-        pokemonType1 = findViewById(R.id.PokemonType1);
+        pokemonType = findViewById(R.id.PokemonType1);
 
+        // gets data from MainActivity
         Intent intent = getIntent();
         String currentName = intent.getStringExtra("name");
         pokemoName.setText(currentName);
         String currentType = intent.getStringExtra("type");
-        pokemonType1.setText(currentType);
-
+        pokemonType.setText("Type: " + currentType);
         int currentHeight = intent.getIntExtra("height", 0);
+        height.setText("Height: " + currentHeight);
         int currentWeight = intent.getIntExtra("weight", 0);
-        height.setText("" + currentHeight);
-        weight.setText("" + currentWeight + "lb");
+        weight.setText("Weight: " + currentWeight + "lb");
+
+        // Edits the font size of the text views
+        pokemoName.setTextSize(30);
+        pokemonType.setTextSize(30);
+        height.setTextSize(25);
+        weight.setTextSize(25);
 
         // when clicked, send user back to the main screen.
         button = (Button) findViewById(R.id.backButton);
@@ -51,7 +55,7 @@ public class DetailsActivity extends AppCompatActivity {
         });
     }
 
-    /** Method to bring useer back to MainActivity. */
+    /** Method to bring user back to MainActivity. */
     public void openMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
