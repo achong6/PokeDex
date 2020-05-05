@@ -30,13 +30,13 @@ public class MainActivity extends AppCompatActivity {
     /** A RequestQueue for the API. */
     private static RequestQueue queue;
 
-    ///** The arrays to get data for the List view. */
-    private ArrayList<String> PokemonNames = new ArrayList<String>();
+    /** The arrays to get data for the List view. */
+    private ArrayList<String> PokemonNames = new ArrayList<>();
+    /** The variable for the ListView. */
     private ListView lv;
 
     /** A Map for the Pokemon name and PokeObject */
     private static Map<String, JsonObject>  pokeMap;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +67,6 @@ public class MainActivity extends AppCompatActivity {
                                 for (int i = 0; i < results.size(); i++) {
                                     // a pokemon.
                                     JsonObject pokemon = results.get(i).getAsJsonObject();
-                                    final String name = pokemon.get("name").getAsString();
-
-
 
                                     //add pokemon names to the Pokemon Name List.
                                     PokemonNames.add(i, pokemon.get("name").getAsString());
@@ -94,14 +91,14 @@ public class MainActivity extends AppCompatActivity {
                                                             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                                 @Override
                                                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                                    // Passes data over to DetailsActivity.
                                                                     JsonObject object = pokeMap.get(String.valueOf(id + 1));
                                                                     Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                                                                     intent.putExtra("name", PokemonNames.get(position));
                                                                     intent.putExtra("weight", object.get("weight").getAsInt());
                                                                     intent.putExtra("height", object.get("height").getAsInt());
 
-                                                                    //get types.
-
+                                                                    // Get types.
                                                                     JsonArray types = object.get("types").getAsJsonArray();
                                                                     String stringType = "";
 
@@ -110,9 +107,7 @@ public class MainActivity extends AppCompatActivity {
                                                                         String typeName = type.get("name").getAsString();
                                                                         stringType = stringType + " " + typeName;
                                                                     }
-
                                                                     intent.putExtra("type", stringType);
-
                                                                     startActivity(intent);
                                                                 }
                                                             });
@@ -124,9 +119,7 @@ public class MainActivity extends AppCompatActivity {
                                                     Log.e("specific Pokemon error", "error");
                                                 }
                                             });
-
-                                    // TODO: 2020-05-03 : implement try/catch blocks if have time. 
-
+                                    // TODO: 2020-05-03 : implement try/catch blocks if have time.
                                     queue.add(pokeRequest);
                                 }
                             }

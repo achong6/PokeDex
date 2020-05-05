@@ -17,7 +17,6 @@ public class DetailsActivity extends AppCompatActivity {
     private TextView weight;
     private TextView pokemoName;
     private TextView pokemonType1;
-    private TextView pokemonType2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,6 @@ public class DetailsActivity extends AppCompatActivity {
         weight = findViewById(R.id.PokemonWeight);
         pokemonID = findViewById(R.id.PokemonID);
         pokemonType1 = findViewById(R.id.PokemonType1);
-        pokemonType2 = findViewById(R.id.PokemonType2);
 
         Intent intent = getIntent();
         String currentName = intent.getStringExtra("name");
