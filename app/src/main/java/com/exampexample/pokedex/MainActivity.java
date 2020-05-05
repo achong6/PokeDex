@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
     ///** The arrays to get data for the List view. */
     private ArrayList<String> PokemonNames = new ArrayList<String>();
-    //private ArrayList<Integer> PokemonIDs = new ArrayList<Integer>();
-
     private ListView lv;
 
     /** A Map for the Pokemon name and PokeObject */
@@ -86,23 +84,7 @@ public class MainActivity extends AppCompatActivity {
                                                             String JsonString = pokeResponse.toString();
                                                             final JsonObject pokeObject = JsonParser.parseString(JsonString).getAsJsonObject();
 
-
                                                             pokeMap.put(pokeObject.get("id").getAsString(), pokeObject);
-
-                                                            //pokeMap.put("type(s)", stringType);
-
-
-                                                            //get weight.
-                                                            //String weight = pokeObject.get("weight").getAsString();
-                                                            //pokeMap.put("weight", weight);
-
-                                                            //get height.
-                                                            //String height = pokeObject.get("height").getAsString();
-                                                            //pokeMap.put("height", height);
-
-
-
-
 
                                                             // creates a list view
                                                             lv = (ListView) findViewById(R.id.listView);
@@ -114,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                                                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                                                     JsonObject object = pokeMap.get(String.valueOf(id + 1));
                                                                     Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-
+                                                                    intent.putExtra("name", PokemonNames.get(position));
                                                                     intent.putExtra("weight", object.get("weight").getAsInt());
                                                                     intent.putExtra("height", object.get("height").getAsInt());
 
