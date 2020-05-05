@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView lv;
 
     /** A Map for the Pokemon name and PokeObject */
-    private static Map<String, JsonObject>  pokeMap;
+    private static Map<String, String>  pokeMap;
 
 
     @Override
@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                                     final String name = pokemon.get("name").getAsString();
 
 
-
                                     //add pokemon names to the Pokemon Name List.
                                     PokemonNames.add(i, pokemon.get("name").getAsString());
 
@@ -84,8 +83,31 @@ public class MainActivity extends AppCompatActivity {
                                                             String JsonString = pokeResponse.toString();
                                                             final JsonObject pokeObject = JsonParser.parseString(JsonString).getAsJsonObject();
 
-                                                            //add to map.
-                                                            pokeMap.put(name, pokeObject);
+                                                            //get types.
+
+                                                            JsonArray types = pokeObject.get("types").getAsJsonArray();
+                                                            String stringType = "";
+
+                                                            for (int j = 0; j < types.size(); j++) {
+                                                                JsonObject type = types.get(j).getAsJsonObject().get("type").getAsJsonObject();
+                                                                String typeName = type.get("name").getAsString();
+                                                                stringType = stringType + " " + typeName;
+                                                            }
+
+                                                            pokeMap.put("type(s)", stringType);
+
+
+                                                            //get weight.
+                                                            String weight = pokeObject.get("weight").getAsString();
+                                                            pokeMap.put("weight", weight);
+
+                                                            //get height.
+                                                            String height = pokeObject.get("height").getAsString();
+                                                            pokeMap.put("height", height);
+
+
+
+
 
                                                             // creates a list view
                                                             lv = (ListView) findViewById(R.id.listView);
@@ -95,28 +117,17 @@ public class MainActivity extends AppCompatActivity {
                                                             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                                 @Override
                                                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                                    JsonObject pokeMapObject = pokeMap.get(name);
+
+
                                                                     Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                                                                    intent.putExtra("name", PokemonNames.get(position));
 
-                                                                    intent.putExtra("weight", pokeMapObject.get("weight").getAsInt());
-                                                                    Log.d("weight", pokeMapObject.get("weight").getAsString());
+                                                                    intent.putExtra("name", pokeMap.get("name"));
 
-                                                                    intent.putExtra("height", pokeMapObject.get("height").getAsInt());
-                                                                    Log.d("height", pokeMapObject.get("height").getAsString());
+                                                                    intent.putExtra("weight", pokeMap.get("weight"));
 
-                                                                    JsonArray types = pokeMapObject.get("types").getAsJsonArray();
-                                                                    String stringType = "";
+                                                                    intent.putExtra("height", pokeMap.get("height"));
 
-
-                                                                    for (int j = 0; j < types.size(); j++) {
-                                                                        JsonObject type = types.get(j).getAsJsonObject().get("type").getAsJsonObject();
-                                                                        String typeName = type.get("name").getAsString();
-                                                                        stringType = stringType + " " + typeName;
-                                                                    }
-
-                                                                    Log.d("type", stringType);
-                                                                    intent.putExtra("type", stringType);
+                                                                    intent.putExtra("type", pokeMap.get("type"));
                                                                     startActivity(intent);
                                                                 }
                                                             });
