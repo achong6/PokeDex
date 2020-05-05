@@ -21,6 +21,7 @@ import com.google.gson.JsonParser;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView lv;
 
     /** A Map for the Pokemon name and PokeObject */
-    private static Map<String, String>  pokeMap;
+    private static Map<String, JsonObject>  pokeMap;
 
 
     @Override
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
+                                pokeMap = new HashMap<>();
                                 String JsonString = response.toString();
                                 JsonObject object = JsonParser.parseString(JsonString).getAsJsonObject();
                                 JsonArray results = object.get("results").getAsJsonArray();
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
                                     // a pokemon.
                                     JsonObject pokemon = results.get(i).getAsJsonObject();
                                     final String name = pokemon.get("name").getAsString();
+
 
 
                                     //add pokemon names to the Pokemon Name List.
@@ -83,27 +86,19 @@ public class MainActivity extends AppCompatActivity {
                                                             String JsonString = pokeResponse.toString();
                                                             final JsonObject pokeObject = JsonParser.parseString(JsonString).getAsJsonObject();
 
-                                                            //get types.
 
-                                                            JsonArray types = pokeObject.get("types").getAsJsonArray();
-                                                            String stringType = "";
+                                                            pokeMap.put(pokeObject.get("id").getAsString(), pokeObject);
 
-                                                            for (int j = 0; j < types.size(); j++) {
-                                                                JsonObject type = types.get(j).getAsJsonObject().get("type").getAsJsonObject();
-                                                                String typeName = type.get("name").getAsString();
-                                                                stringType = stringType + " " + typeName;
-                                                            }
-
-                                                            pokeMap.put("type(s)", stringType);
+                                                            //pokeMap.put("type(s)", stringType);
 
 
                                                             //get weight.
-                                                            String weight = pokeObject.get("weight").getAsString();
-                                                            pokeMap.put("weight", weight);
+                                                            //String weight = pokeObject.get("weight").getAsString();
+                                                            //pokeMap.put("weight", weight);
 
                                                             //get height.
-                                                            String height = pokeObject.get("height").getAsString();
-                                                            pokeMap.put("height", height);
+                                                            //String height = pokeObject.get("height").getAsString();
+                                                            //pokeMap.put("height", height);
 
 
 
@@ -117,17 +112,25 @@ public class MainActivity extends AppCompatActivity {
                                                             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                                 @Override
                                                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
+                                                                    JsonObject object = pokeMap.get(String.valueOf(id + 1));
                                                                     Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
 
-                                                                    intent.putExtra("name", pokeMap.get("name"));
+                                                                    intent.putExtra("weight", object.get("weight").getAsInt());
+                                                                    intent.putExtra("height", object.get("height").getAsInt());
 
-                                                                    intent.putExtra("weight", pokeMap.get("weight"));
+                                                                    //get types.
 
-                                                                    intent.putExtra("height", pokeMap.get("height"));
+                                                                    JsonArray types = object.get("types").getAsJsonArray();
+                                                                    String stringType = "";
 
-                                                                    intent.putExtra("type", pokeMap.get("type"));
+                                                                    for (int j = 0; j < types.size(); j++) {
+                                                                        JsonObject type = types.get(j).getAsJsonObject().get("type").getAsJsonObject();
+                                                                        String typeName = type.get("name").getAsString();
+                                                                        stringType = stringType + " " + typeName;
+                                                                    }
+
+                                                                    intent.putExtra("type", stringType);
+
                                                                     startActivity(intent);
                                                                 }
                                                             });
