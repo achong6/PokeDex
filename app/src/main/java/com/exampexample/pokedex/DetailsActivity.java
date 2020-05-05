@@ -3,6 +3,7 @@ package com.exampexample.pokedex;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -41,9 +42,13 @@ public class DetailsActivity extends AppCompatActivity {
 
         // Edits the font size of the text views
         pokemoName.setTextSize(30);
+        pokemoName.setTextColor(Color.BLACK);
         pokemonType.setTextSize(30);
+        pokemonType.setTextColor(Color.BLACK);
         height.setTextSize(25);
+        height.setTextColor(Color.BLACK);
         weight.setTextSize(25);
+        weight.setTextColor(Color.BLACK);
 
         // when clicked, send user back to the main screen.
         button = (Button) findViewById(R.id.backButton);
