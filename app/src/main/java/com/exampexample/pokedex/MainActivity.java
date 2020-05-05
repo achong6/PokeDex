@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
                                 for (int i = 0; i < results.size(); i++) {
                                     // a pokemon.
                                     JsonObject pokemon = results.get(i).getAsJsonObject();
-                                    Log.d("name", pokemon.get("name").getAsString());
                                     final String name = pokemon.get("name").getAsString();
 
 
@@ -99,8 +98,12 @@ public class MainActivity extends AppCompatActivity {
                                                                     JsonObject pokeMapObject = pokeMap.get(name);
                                                                     Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                                                                     intent.putExtra("name", PokemonNames.get(position));
-                                                                    intent.putExtra("weight", pokeMapObject.get("height").getAsInt());
-                                                                    intent.putExtra("height", pokeMapObject.get("weight").getAsInt());
+
+                                                                    intent.putExtra("weight", pokeMapObject.get("weight").getAsInt());
+                                                                    Log.d("weight", pokeMapObject.get("weight").getAsString());
+
+                                                                    intent.putExtra("height", pokeMapObject.get("height").getAsInt());
+                                                                    Log.d("height", pokeMapObject.get("height").getAsString());
 
                                                                     JsonArray types = pokeMapObject.get("types").getAsJsonArray();
                                                                     String stringType = "";
@@ -109,10 +112,10 @@ public class MainActivity extends AppCompatActivity {
                                                                     for (int j = 0; j < types.size(); j++) {
                                                                         JsonObject type = types.get(j).getAsJsonObject().get("type").getAsJsonObject();
                                                                         String typeName = type.get("name").getAsString();
-                                                                        //print type name to logcat.
-                                                                        Log.d("type", typeName);
                                                                         stringType = stringType + " " + typeName;
                                                                     }
+
+                                                                    Log.d("type", stringType);
                                                                     intent.putExtra("type", stringType);
                                                                     startActivity(intent);
                                                                 }
@@ -122,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onErrorResponse(VolleyError error) {
                                                     // TODO: Handle error
-                                                    Log.e("specific Pokemon error", "no");
+                                                    Log.e("specific Pokemon error", "error");
                                                 }
                                             });
 
